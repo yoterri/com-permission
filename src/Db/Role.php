@@ -3,7 +3,7 @@
 namespace Com\Component\Permission\Db;
 
 use Com\Db\AbstractDb;
-use Com\LazyLoadInterface;
+use Com\Interfaces\LazyLoadInterface;
 
 use Zend\Db\Sql\Select;
 use Zend\Db\ResultSet\AbstractResultSet;
@@ -49,7 +49,7 @@ class Role extends AbstractDb implements LazyLoadInterface
     	$sm = $this->getContainer();
 
         #
-        $dbUserRole = $sm->get('Com\Component\Permission\Entity\UserHasRole');
+        $dbUserRole = $sm->get('Com\Component\Permission\Db\UserHasRole');
         $dbRole = $this;
 
         $select = new Select();
@@ -68,7 +68,7 @@ class Role extends AbstractDb implements LazyLoadInterface
 
     /**
      * @param int $userId
-     * @param string|int|string[]|int[] $role
+     * @param string $role
      * @return bool
      */
     function userHasRole($userId, $role)
@@ -78,24 +78,10 @@ class Role extends AbstractDb implements LazyLoadInterface
     	$roles = $this->findByUser($userId);
     	if($roles->count())
     	{
-    		if(is_array($role))
-	        {
-	            foreach($role as $item)
-	            {
-	                if($this->_hasRole($role, $roles))
-	                {
-	                    $flag = true;
-	                    break;
-	                }
-	            }
-	        }
-	        else
-	        {
-	            if($role)
-	            {
-	                $flag = $this->_hasRole($role, $roles);
-	            }
-	        }
+    		if($role)
+            {
+                $flag = $this->_hasRole($role, $roles);
+            }
     	}
 
         return $flag;

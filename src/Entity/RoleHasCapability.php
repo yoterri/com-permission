@@ -3,7 +3,7 @@
 namespace Com\Component\Permission\Entity;
 
 use Com\Entity\AbstractEntity;
-use Com\LazyLoadInterface;
+use Com\Interfaces\LazyLoadInterface;
 
 class RoleHasCapability extends AbstractEntity implements LazyLoadInterface
 {

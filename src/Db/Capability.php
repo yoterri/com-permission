@@ -2,7 +2,7 @@
 
 namespace Com\Component\Permission\Db;
 
-use Com\LazyLoadInterface;
+use Com\Interfaces\LazyLoadInterface;
 use Com\Db\AbstractDb;
 
 use Zend\Sql\Db\Select;

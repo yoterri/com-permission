@@ -3,7 +3,7 @@
 namespace Com\Component\Permission\Db;
 
 use Com\Db\AbstractDb;
-use Com\LazyLoadInterface;
+use Com\Interfaces\LazyLoadInterface;
 
 class UserHasRole extends AbstractDb implements LazyLoadInterface
 {
