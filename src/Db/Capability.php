@@ -5,8 +5,8 @@ namespace Com\Component\Permission\Db;
 use Com\Interfaces\LazyLoadInterface;
 use Com\Db\AbstractDb;
 
-use Zend\Sql\Db\Select;
-use Zend\Sql\Db\Where;
+use Laminas\Sql\Db\Select;
+use Laminas\Sql\Db\Where;
 
 class Capability extends AbstractDb implements LazyLoadInterface
 {

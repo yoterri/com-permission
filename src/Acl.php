@@ -2,11 +2,11 @@
 
 namespace Com\Component\Permission;
 
-use Zend\Db\ResultSet\AbstractResultSet;
-use Zend\Permissions\Acl\Acl as zendAcl;
-use Zend\Db\Sql\Select;
-use Zend\Db\Sql\Where;
-use Zend\Db\Sql\Expression;
+use Laminas\Db\ResultSet\AbstractResultSet;
+use Laminas\Permissions\Acl\Acl as laminasAcl;
+use Laminas\Db\Sql\Select;
+use Laminas\Db\Sql\Where;
+use Laminas\Db\Sql\Expression;
 
 use Com\Interfaces\LazyLoadInterface;
 use Com\Control\AbstractControl;
@@ -20,9 +20,9 @@ class Acl extends AbstractControl implements LazyLoadInterface
     protected $hashTable;
 
     /**
-     * @var zendAcl
+     * @var laminasAcl
      */
-    protected $zendAcl;
+    protected $laminasAcl;
 
     /**
      * @var string
@@ -197,8 +197,8 @@ class Acl extends AbstractControl implements LazyLoadInterface
         
 
         #
-        $zendAcl = $this->_getZendAcl();
-        if(!$zendAcl->hasRole($role))
+        $laminasAcl = $this->_getLaminasAcl();
+        if(!$laminasAcl->hasRole($role))
         {
             $this->hashTable[$role][$capability] = false;
             return false;
@@ -206,14 +206,14 @@ class Acl extends AbstractControl implements LazyLoadInterface
 
         #
         $capability = strtolower($capability);
-        if(!$zendAcl->hasResource($capability))
+        if(!$laminasAcl->hasResource($capability))
         {
             $this->hashTable[$role][$capability] = false;
             return false;
         }
 
         #
-        $flag = $zendAcl->isAllowed($role, $capability);
+        $flag = $laminasAcl->isAllowed($role, $capability);
         $this->hashTable[$role][$capability] = $flag;
         return $flag;
     }
@@ -256,21 +256,21 @@ class Acl extends AbstractControl implements LazyLoadInterface
 
 
     /**
-     * @return zendAcl
+     * @return laminasAcl
      */
-    protected function _getZendAcl()
+    protected function _getLaminasAcl()
     {
-        if(!$this->zendAcl)
+        if(!$this->laminasAcl)
         {
             $sm = $this->getContainer();
-            $this->zendAcl = new zendAcl();
+            $this->laminasAcl = new laminasAcl();
 
             #
             $dbRole = $sm->get('Com\Component\Permission\Db\Role');
             $roles = $dbRole->findAll();
             foreach($roles as $role)
             {
-                $this->zendAcl->addRole($role->name);
+                $this->laminasAcl->addRole($role->name);
             }
 
             #
@@ -278,7 +278,7 @@ class Acl extends AbstractControl implements LazyLoadInterface
             $capabilities = $dbCap->findAll();
             foreach($capabilities as $capability)
             {
-                $this->zendAcl->addResource(strtolower($capability->name));
+                $this->laminasAcl->addResource(strtolower($capability->name));
             }
 
             #
@@ -298,21 +298,21 @@ class Acl extends AbstractControl implements LazyLoadInterface
             $rowset = $dbRoleCap->executeCustomSelect($select, $entity);
             foreach($rowset as $row)
             {
-                if(!$this->zendAcl->hasRole($row->role))
+                if(!$this->laminasAcl->hasRole($row->role))
                 {
                     continue;
                 }
 
                 $capability = strtolower($row->capability);
-                if(!$this->zendAcl->hasResource($capability))
+                if(!$this->laminasAcl->hasResource($capability))
                 {
                     continue;
                 }
 
-                $this->zendAcl->allow($row->role, $capability);
+                $this->laminasAcl->allow($row->role, $capability);
             }
         }
 
-        return $this->zendAcl;
+        return $this->laminasAcl;
     }
 }

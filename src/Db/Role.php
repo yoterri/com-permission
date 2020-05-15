@@ -5,8 +5,8 @@ namespace Com\Component\Permission\Db;
 use Com\Db\AbstractDb;
 use Com\Interfaces\LazyLoadInterface;
 
-use Zend\Db\Sql\Select;
-use Zend\Db\ResultSet\AbstractResultSet;
+use Laminas\Db\Sql\Select;
+use Laminas\Db\ResultSet\AbstractResultSet;
 
 class Role extends AbstractDb implements LazyLoadInterface
 {
